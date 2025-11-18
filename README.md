@@ -11,7 +11,8 @@ O projeto consiste em um varal que irá recolher as roupas de maneira automátic
 
 
 
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/bQrFkq0H)
+## Changelogs
+18/11 - Controlamos a velocidade do motor, aprendemos a interpretar o valor analógico do sensor de chuva, adicionamos o sensor ldr e mudamos o circuito para uma protoboard maior.
 
 
 # Referencias
