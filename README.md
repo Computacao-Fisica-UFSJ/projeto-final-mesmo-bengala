@@ -17,5 +17,6 @@ O projeto consiste em um varal que irá recolher as roupas de maneira automátic
 
 # Referencias
 [Motor](https://www.blogdarobotica.com/2022/10/10/como-controlar-um-motor-dc-usando-o-mini-driver-ponte-h-l9110s/)
-[Sensor de Chuva](https://www.blogdarobotica.com/2024/02/23/como-utilizar-o-sensor-de-chuva-com-arduino/)
+[Sensor de chuva](https://www.blogdarobotica.com/2024/02/23/como-utilizar-o-sensor-de-chuva-com-arduino/)
 [Sensor de luminosidade](https://www.blogdarobotica.com/2020/09/29/utilizando-o-sensor-de-luminosidade-ldr-no-arduino/)
+[Sensor de velocidade](https://www.blogdarobotica.com/2024/03/27/como-utilizar-o-sensor-de-velocidade-encoder-com-o-arduino/)
