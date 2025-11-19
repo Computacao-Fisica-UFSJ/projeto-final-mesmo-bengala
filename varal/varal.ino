@@ -1,52 +1,84 @@
-#define leituraAnalogica A0 //Atribui o pino A0 a variável velocidade_motor
-#define motorB_PWM 10 //Controle de velocidade do motor A
-#define motorB_EN 8 //Controle de direção do motor A
-#define ldrLeitura A1 //Atribui o pino A1 a variável ldrLeitura
+#define pinRainSensor A0
+#define pinEnginePWM 10
+#define pinEngineDirection 8
+#define pinLDRSensor A1
+#define pintReedSensor 2
+#define pinSpeedSensor 4
 
-int velocidade = 127; //variável para controle de velocidade de rotação dos motores,sendo 0 o valor de velocidade mínimo e 255 o valor de velocidade máxima.
-int ldrValor = 0; // variavel ldr valor
+int speedEngine = 127;
+int contagem = 0;
+
 
 void setup(){ 
-  //Configura os motores como saída
-  pinMode(motorB_PWM, OUTPUT);
-  pinMode(motorB_EN, OUTPUT);
-  pinMode(ldrLeitura, INPUT);
+  pinMode(pinEnginePWM, OUTPUT);
+  pinMode(pinEngineDirection, OUTPUT);
+  pinMode(pinLDRSensor, INPUT);
+  pinMode(pintReedSensor, INPUT);
+  pinMode(pinSpeedSensor, INPUT);
+  pinMode(pinRainSensor, INPUT);
 
-  //Configura o sensor de chuva
-  Serial.begin(9600); //Incia a comunicação serial
-  pinMode(leituraAnalogica, INPUT); //Define leituraAnalogica como entrada
+  Serial.begin(9600);
 }
 
 void loop(){
-    ldrValor=analogRead(ldrLeitura);//Lê o valor do sensor ldr e armazena na variável valorldr
-    Serial.print("Valor lido pelo LDR = ");//Imprime na serial a mensagem Valor lido pelo LDR
-    Serial.println(ldrValor);//Imprime na serial os dados de valorldr
-    ParaMotor();
-    MotorSentidoHorario(); //Chama a função para rotação do motor no sentido horário
-//    delay(5000); //Aguarda 5000 milissegundos
-//    MotorSentidoAntiHorario(); //Chama a função para rotação do motor no sentido anti-horário
-//    delay(5000); //Aguarda 5000 milissegundos
+
 }
 
 void MotorSentidoHorario(){
-  ParaMotor();
-  digitalWrite(motorB_EN, HIGH); //Motor A. HIGH = HORARIO
-  analogWrite(motorB_PWM, velocidade); //PWM do motor 
+  digitalWrite(pinEngineDirection, HIGH);
+  analogWrite(pinEnginePWM, speedEngine);
 }
 
 void MotorSentidoAntiHorario(){
-  ParaMotor();
-  digitalWrite(motorB_EN, LOW); //Motor A. LOW = ANTI-HORÁRIO
-  analogWrite(motorB_PWM, velocidade); //PWM do motor 
+  digitalWrite(pinEngineDirection, LOW);
+  analogWrite(pinEnginePWM, speedEngine);
 }
 
-void ParaMotor(){
-  int valorAnalogico = analogRead(leituraAnalogica); //Realiza a leitura analógica do sensor e armazena em valorAnalogico
-  //Serial.println(valorAnalogico);
-  if(valorAnalogico < 900){
-//    Serial.println("Status: Chuva detectada");
-    velocidade = 0;
+void StopEngine(){
+  speedEngine = 0;
+  analogWrite(pinEnginePWM, speedEngine);
+}
+
+bool DetectedWindy(){
+  int speedSensorDetected=digitalRead(pinSpeedSensor);
+  
+  if(speedSensorDetected == 1){
+    contagem++;
+    Serial.print("Numero de detecções: ");
+    Serial.println(contagem);
+    delay(500);
+  }
+}
+
+bool DetectedRaining(){
+  int rainSensorValue = analogRead(pinRainSensor);
+  if(rainSensorValue < 900){
+    return true;
   } else {
-//    Serial.println("Status: Chuva não detectada");
+    return false;
+  }
+}
+
+bool DetectedSunny(){
+  int ldrSensorValue=analogRead(pinLDRSensor);
+  Serial.print("Valor lido pelo LDR = ");
+  Serial.println(ldrSensorValue);
+
+  if(ldrSensorValue > 100){
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool DetectedEndCourse(){
+  bool isEndCourse=digitalRead(pintReedSensor);
+  Serial.print("Valor reed = ");
+  Serial.println(isEndCourse);
+
+  if(isEndCourse){
+    return true;
+  } else {
+    return false;
   }
 }
