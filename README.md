@@ -12,12 +12,12 @@ O projeto consiste em um varal que irá recolher as roupas de maneira automátic
 
 
 ## Changelogs
-18/11 - Controlamos a velocidade do motor, aprendemos a interpretar o valor analógico do sensor de chuva, adicionamos o sensor ldr e mudamos o circuito para uma protoboard maior.
-19/11 - Conectamos sensor de velocidade, começamos a organizar o código em funções separadas para cada tipo de detecção dos sensores.
+- 18/11 - Controlamos a velocidade do motor, aprendemos a interpretar o valor analógico do sensor de chuva, adicionamos o sensor ldr e mudamos o circuito para uma protoboard maior.
+- 19/11 - Conectamos sensor de velocidade, começamos a organizar o código em funções separadas para cada tipo de detecção dos sensores.
 
 
 # Referencias
-[Motor](https://www.blogdarobotica.com/2022/10/10/como-controlar-um-motor-dc-usando-o-mini-driver-ponte-h-l9110s/)
-[Sensor de chuva](https://www.blogdarobotica.com/2024/02/23/como-utilizar-o-sensor-de-chuva-com-arduino/)
-[Sensor de luminosidade](https://www.blogdarobotica.com/2020/09/29/utilizando-o-sensor-de-luminosidade-ldr-no-arduino/)
-[Sensor de velocidade](https://www.blogdarobotica.com/2024/03/27/como-utilizar-o-sensor-de-velocidade-encoder-com-o-arduino/)
+- [Motor](https://www.blogdarobotica.com/2022/10/10/como-controlar-um-motor-dc-usando-o-mini-driver-ponte-h-l9110s/)
+- [Sensor de chuva](https://www.blogdarobotica.com/2024/02/23/como-utilizar-o-sensor-de-chuva-com-arduino/)
+- [Sensor de luminosidade](https://www.blogdarobotica.com/2020/09/29/utilizando-o-sensor-de-luminosidade-ldr-no-arduino/)
+- [Sensor de velocidade](https://www.blogdarobotica.com/2024/03/27/como-utilizar-o-sensor-de-velocidade-encoder-com-o-arduino/)
