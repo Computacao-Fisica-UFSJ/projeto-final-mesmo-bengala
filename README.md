@@ -13,6 +13,7 @@ O projeto consiste em um varal que irá recolher as roupas de maneira automátic
 
 ## Changelogs
 18/11 - Controlamos a velocidade do motor, aprendemos a interpretar o valor analógico do sensor de chuva, adicionamos o sensor ldr e mudamos o circuito para uma protoboard maior.
+19/11 - Conectamos sensor de velocidade, começamos a organizar o código em funções separadas para cada tipo de detecção dos sensores.
 
 
 # Referencias
