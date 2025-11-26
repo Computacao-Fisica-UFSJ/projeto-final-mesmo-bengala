@@ -15,6 +15,7 @@ O projeto consiste em um varal que irá recolher as roupas de maneira automátic
 - 18/11 - Controlamos a velocidade do motor, aprendemos a interpretar o valor analógico do sensor de chuva, adicionamos o sensor ldr e mudamos o circuito para uma protoboard maior.
 - 19/11 - Conectamos sensor de velocidade, começamos a organizar o código em funções separadas para cada tipo de detecção dos sensores.
 - 25/11 - Alteramos a função para detectar se o vento está forte em um determinado intervalo, adicionamos uma função para verificar a velocidade do vento e calculamos o risco chuva.
+- 26/11 - Perdemos nosso Reed Switch, arrumamos lógica do motor, começamos a pensar na "maquete"
 
 
 # Referencias
