@@ -5,8 +5,12 @@
 #define pintReedSensor 2
 #define pinSpeedSensor 4
 
+unsigned long lastWindOccurrence = 0;
+unsigned long windInterval = 10000UL;
 int speedEngine = 127;
-int contagem = 0;
+int windCount = 0;
+
+bool clothesOut = false;
 
 
 void setup(){ 
@@ -17,11 +21,64 @@ void setup(){
   pinMode(pinSpeedSensor, INPUT);
   pinMode(pinRainSensor, INPUT);
 
+  if(!DetectedRaining()) {
+    clothesOut = true;
+  }
+
   Serial.begin(9600);
 }
 
 void loop(){
+  DetectWindSpeed();
 
+  int rainRisk = DetermineRainRisk();
+
+  // Risco alto de chuva:
+  if(rainRisk >= 100) {
+    Serial.println("Risco Alto de chuva!");
+
+    // Verifica se as roupas estão do lado de fora do varal:
+    if(clothesOut) {
+      Serial.println("Recolhendo as roupas...");
+
+      MotorSentidoAntiHorario();
+    
+      if(DetectedEndCourse()) {
+        StopEngine();
+        clothesOut = false;
+      }
+    }
+  }
+
+  // Risco médio de chuva:
+  else if(rainRisk < 70) {
+    Serial.println("Risco Médio de chuva!");
+
+    StopEngine();
+  }
+
+  // Risco baixo de chuva:
+  else {
+    Serial.println("Risco Baixo de chuva!");
+
+    // Verifica se as roupas estão do lado de fora do varal:
+    if(!clothesOut) {
+      Serial.println("Estendendo as roupas...");
+
+      MotorSentidoHorario();
+
+      if(DetectedEndCourse()) {
+        StopEngine();
+        clothesOut = true;
+      }
+    }
+
+    else {
+      StopEngine();
+    }
+  }
+
+  delay(30);
 }
 
 void MotorSentidoHorario(){
@@ -39,15 +96,33 @@ void StopEngine(){
   analogWrite(pinEnginePWM, speedEngine);
 }
 
-bool DetectedWindy(){
+void DetectWindSpeed() {
   int speedSensorDetected=digitalRead(pinSpeedSensor);
   
-  if(speedSensorDetected == 1){
-    contagem++;
-    Serial.print("Numero de detecções: ");
-    Serial.println(contagem);
-    delay(500);
+  if (speedSensorDetected == 1) {
+    windCount++;
+    delay(5); 
   }
+}
+
+bool DetectedWindy(){
+  if(millis() - lastWindOccurrence >= windInterval) {
+    lastWindOccurrence = millis();
+
+    Serial.print("Pulsos de vento em 10s: ");
+    Serial.println(windCount);
+    
+     // Verifica se há uma ocorráncia de vento forte:
+     if(windCount > 5) {
+       windCount = 0;
+       return true;
+     }
+
+     windCount = 0;
+     return false;
+  }
+  
+  return false;
 }
 
 bool DetectedRaining(){
@@ -81,4 +156,28 @@ bool DetectedEndCourse(){
   } else {
     return false;
   }
+}
+
+int DetermineRainRisk() {
+  short rainRisk = 0;
+
+  // Se o sensor de chuva detectou a ocorrência de chuva, o risco é máximo:
+  if(DetectedRaining()) {
+    rainRisk += 100;  
+  }
+
+  // Se o céu está nublado ou escuro, o risco é médio:
+  if(!DetectedSunny()) {
+    rainRisk += 40;
+  }
+
+  // Se há ventos fortes, o risco é baixo:
+  if(DetectedWindy()) {
+    rainRisk += 10;
+  }
+
+  Serial.print("Risco de chuva: ");
+  Serial.println(rainRisk);
+
+  return rainRisk;
 }
