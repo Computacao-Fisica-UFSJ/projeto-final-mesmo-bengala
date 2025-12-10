@@ -21,20 +21,24 @@ void setup(){
   pinMode(pinSpeedSensor, INPUT);
   pinMode(pinRainSensor, INPUT);
 
-  if(!DetectedRaining()) {
-    clothesOut = true;
-  }
+//  if(!DetectedRaining()) {
+//    clothesOut = true;
+//  }
+
+  StopEngine();
 
   Serial.begin(9600);
 }
 
 void loop(){
+  Serial.print("Velocidade do motor: ");
+  Serial.println(speedEngine);
   DetectWindSpeed();
 
   int rainRisk = DetermineRainRisk();
 
   // Risco alto de chuva:
-  if(rainRisk >= 100) {
+  if(rainRisk >= 80) {
     Serial.println("Risco Alto de chuva!");
 
     // Verifica se as roupas estão do lado de fora do varal:
@@ -51,7 +55,7 @@ void loop(){
   }
 
   // Risco médio de chuva:
-  else if(rainRisk < 70) {
+  else if(rainRisk >= 50) {
     Serial.println("Risco Médio de chuva!");
 
     StopEngine();
@@ -66,14 +70,13 @@ void loop(){
       Serial.println("Estendendo as roupas...");
 
       MotorSentidoHorario();
+//      MotorSentidoAntiHorario();
 
       if(DetectedEndCourse()) {
         StopEngine();
         clothesOut = true;
       }
-    }
-
-    else {
+    } else {
       StopEngine();
     }
   }
@@ -82,11 +85,13 @@ void loop(){
 }
 
 void MotorSentidoHorario(){
+  speedEngine = 127;
   digitalWrite(pinEngineDirection, HIGH);
   analogWrite(pinEnginePWM, speedEngine);
 }
 
 void MotorSentidoAntiHorario(){
+  speedEngine = 127;
   digitalWrite(pinEngineDirection, LOW);
   analogWrite(pinEnginePWM, speedEngine);
 }
@@ -109,8 +114,8 @@ bool DetectedWindy(){
   if(millis() - lastWindOccurrence >= windInterval) {
     lastWindOccurrence = millis();
 
-    Serial.print("Pulsos de vento em 10s: ");
-    Serial.println(windCount);
+    //Serial.print("Pulsos de vento em 10s: ");
+    //Serial.println(windCount);
     
      // Verifica se há uma ocorráncia de vento forte:
      if(windCount > 5) {
@@ -136,8 +141,8 @@ bool DetectedRaining(){
 
 bool DetectedSunny(){
   int ldrSensorValue=analogRead(pinLDRSensor);
-  Serial.print("Valor lido pelo LDR = ");
-  Serial.println(ldrSensorValue);
+//  Serial.print("Valor lido pelo LDR = ");
+//  Serial.println(ldrSensorValue);
 
   if(ldrSensorValue > 100){
     return true;
@@ -147,15 +152,16 @@ bool DetectedSunny(){
 }
 
 bool DetectedEndCourse(){
-  bool isEndCourse=digitalRead(pintReedSensor);
-  Serial.print("Valor reed = ");
-  Serial.println(isEndCourse);
-
-  if(isEndCourse){
-    return true;
-  } else {
-    return false;
-  }
+//  bool isEndCourse=digitalRead(pintReedSensor);
+//  Serial.print("Valor reed = ");
+//  Serial.println(isEndCourse);
+//
+//  if(isEndCourse){
+//    return true;
+//  } else {
+//    return false;
+//  }
+  return false;
 }
 
 int DetermineRainRisk() {
@@ -168,7 +174,7 @@ int DetermineRainRisk() {
 
   // Se o céu está nublado ou escuro, o risco é médio:
   if(!DetectedSunny()) {
-    rainRisk += 40;
+    rainRisk += 70;
   }
 
   // Se há ventos fortes, o risco é baixo:
