@@ -17,6 +17,7 @@ O projeto consiste em um varal que irá recolher as roupas de maneira automátic
 - 25/11 - Alteramos a função para detectar se o vento está forte em um determinado intervalo, adicionamos uma função para verificar a velocidade do vento e calculamos o risco chuva.
 - 26/11 - Perdemos nosso Reed Switch, arrumamos lógica do motor, começamos a pensar na "maquete".
 - 09/12 - Realizamos várias mudanças no código para que a detecção de chuva funcione corretamente e adicionamos a chave de fim de curso ao circuito.
+- 10/12 - Começamos a fazer a "maquete"
 
 
 # Referencias
