@@ -6,12 +6,15 @@
 #define PIN_FIM_DE_CURSO_ESTENDIDA     3
 #define PIN_MOTOR_PWM                  10
 #define PIN_MOTOR_DIRECAO              8
+#define PIN_MOTOR_VENTO_PWM            11
+#define PIN_MOTOR_VENTO_DIRECAO        12
+#define PIN_POTENCIOMETRO              A5
 
 // --- DEFINE: PARÂMETROS ---
 #define VELOCIDADE_MOTOR               255
 #define LIMITE_SENSOR_CHUVA            900
 #define LIMITE_LUZ_DIA                 100
-#define PULSOS_VENTO_FORTE             5
+#define PULSOS_VENTO_FORTE             30
 #define INTERVALO_VENTO                10000UL
 #define INTERVALO_LOOP                 30
 
@@ -25,23 +28,38 @@ bool estaVentandoForte = false;
 
 bool roupasEstendidas = true; 
 
+int pwm_vento = 0;
+
 void setup() {
   pinMode(PIN_SENSOR_CHUVA, INPUT);
   pinMode(PIN_SENSOR_LUZ, INPUT);
   pinMode(PIN_SENSOR_VEL_VENTO, INPUT);
   pinMode(PIN_FIM_DE_CURSO_RECOLHIDA, INPUT);
-  pinMode(PIN_FIM_DE_CURSO_ESTENDIDA, INPUT); 
+  pinMode(PIN_FIM_DE_CURSO_ESTENDIDA, INPUT);
+  pinMode(PIN_POTENCIOMETRO, INPUT); 
 
   pinMode(PIN_MOTOR_PWM, OUTPUT);
   pinMode(PIN_MOTOR_DIRECAO, OUTPUT);
+  pinMode(PIN_MOTOR_VENTO_PWM, OUTPUT);
+  pinMode(PIN_MOTOR_VENTO_DIRECAO, OUTPUT);
 
   pararMotor();
   Serial.begin(9600);
   Serial.println("--- Sistema de Varal Iniciado ---");
+
 }
 
 void loop() {
-//  atualizarLeituraVento();
+  pwm_vento = analogRead(PIN_POTENCIOMETRO);
+  pwm_vento = map(pwm_vento,0, 1023, 0, 255);
+
+  digitalWrite(PIN_MOTOR_VENTO_DIRECAO, LOW);
+  analogWrite(PIN_MOTOR_VENTO_PWM, pwm_vento);
+  
+  atualizarLeituraVento();
+//
+//  Serial.print("Esta ventando; ");
+//  Serial.println(estaVentandoForte);
 
   if (millis() - tempoUltimoLoop >= INTERVALO_LOOP) {
     tempoUltimoLoop = millis();
@@ -57,8 +75,6 @@ void processarDecisaoMovimento(int risco) {
     if (roupasEstendidas) {
       Serial.println("ACAO: Risco Alto! Recolhendo roupas...");
       moverParaDentro();
-    } else {
-      pararMotor();
     }
   }
   // Cenário 2: Risco BAIXO (Estender)
@@ -66,8 +82,6 @@ void processarDecisaoMovimento(int risco) {
     if (!roupasEstendidas) {
       Serial.println("ACAO: Tempo bom! Estendendo roupas...");
       moverParaFora();
-    } else {
-      pararMotor();
     }
   }
   // Cenário 3: Risco MÉDIO (Manter como está)
@@ -75,6 +89,16 @@ void processarDecisaoMovimento(int risco) {
     Serial.println("STATUS: Risco Médio. Aguardando...");
 //    pararMotor();
   }
+
+  if(detectouFimDeCursoEstendida() || detectouFimDeCursoRecolhida()) {
+      if(detectouFimDeCursoRecolhida()){
+        pararMotor();
+        roupasEstendidas = false;
+      } else {
+        pararMotor();
+        roupasEstendidas = true;
+      }
+    }
 }
 
 void moverParaFora() {
@@ -107,23 +131,24 @@ void pararMotor() {
   analogWrite(PIN_MOTOR_PWM, 0);
 }
 
-//void atualizarLeituraVento() {
-//  int estadoAtual = digitalRead(PIN_SENSOR_VEL_VENTO);
-//
-//  // Detecção de borda (apenas conta quando muda de LOW para HIGH)
-//  if (estadoAtual == HIGH && estadoAnteriorSensorVento == LOW) {
-//    contagemPulsosVento++;
-//  }
-//  estadoAnteriorSensorVento = estadoAtual;
-//
-//  // Verifica intervalo de tempo
-//  if (millis() - tempoUltimaVerificacaoVento >= INTERVALO_VENTO) {
-//    estaVentandoForte = (contagemPulsosVento > PULSOS_VENTO_FORTE);
-//    
-//    contagemPulsosVento = 0;
-//    tempoUltimaVerificacaoVento = millis();
-//  }
-//}
+void atualizarLeituraVento() {
+  int estadoAtual = digitalRead(PIN_SENSOR_VEL_VENTO);
+
+  // Detecção de borda (apenas conta quando muda de LOW para HIGH)
+  if (estadoAtual == LOW && estadoAnteriorSensorVento == HIGH) {
+    contagemPulsosVento++;
+  }
+  estadoAnteriorSensorVento = estadoAtual;
+
+  // Verifica intervalo de tempo
+  if (millis() - tempoUltimaVerificacaoVento >= INTERVALO_VENTO) {
+    estaVentandoForte = (contagemPulsosVento > PULSOS_VENTO_FORTE);
+    Serial.print("Contagem de pulso: ");
+    Serial.println(contagemPulsosVento);
+    contagemPulsosVento = 0;
+    tempoUltimaVerificacaoVento = millis();
+  }
+}
 
 int calcularRiscoChuva() {
   int risco = 0;
