@@ -8,6 +8,7 @@
 - 09/12 - Realizamos várias mudanças no código para que a detecção de chuva funcione corretamente e adicionamos a chave de fim de curso ao circuito.
 - 10/12 - Começamos a fazer a "maquete"
 - 11/12 - Arrumamos lógica de parar o motor, descartamos o catavento, colamos as peças na "maquete"
+- 15/12 - Finalização do projeto e apresentação
 
 ## Contextualização
 
@@ -35,6 +36,7 @@ A seguir, estão listados todos os materiais utilizados na montagem do projeto:
 | Módulo Chave Fim de Curso (2 unidades)               | Detectar os limites físicos de movimentação do varal (totalmente estendido ou recolhido)      |
 | Elástico | Utilizado para simular a corda do varal                        |
 | Caixa de papelão              | Montar a estrutura do varal               |
+| Potenciômetro                 | Controlar a velocidade do motor que simula o vento       |
 
 - [Módulo Sensor de Chuva](https://www.eletrogate.com/modulo-sensor-de-chuva)
 - [Módulo Interruptor Magnético Reed Switch - KY-025](https://www.eletrogate.com/modulo-interruptor-magnetico-reed-switch)
@@ -68,7 +70,7 @@ Em relação aos problemas encontrados no processo de montagem, durante o desenv
 
 - **Ativar as chaves de fim de curso**: devido à estrutura mecânica do projeto, não foi possível implementar um mecanismo eficiente para que as chaves fossem acionados automaticamente durante o movimento do varal, sendo necessário acioná-las manualmente durante os testes;
 
-- **Contagem dos pulsos**: inicialmente, a solução utilizada seria um cata-vento acoplado no sensor de velocidade para contagem dos pulsos e medição da velocidade do vento. Porém, o cata-vento o cata-vento colidia com a caixa do protótipo e também não foi possível encontrar um ponto adequado para sua fixação. Dessa forma, a alternativa adotada foi a utilização de um **disco acoplado a um motor DC**, o qual era posicionado manualmente no sensor para simular a contagem dos pulsos. 
+- **Contagem dos pulsos**: inicialmente, a solução utilizada seria um cata-vento acoplado no sensor de velocidade para contagem dos pulsos e medição da velocidade do vento. Porém, o cata-vento colidia com a caixa do protótipo e também não foi possível encontrar um ponto adequado para sua fixação. Dessa forma, a alternativa adotada foi a utilização de um **disco acoplado a um motor DC**, o qual era posicionado manualmente no sensor para simular a contagem dos pulsos. 
 
 
 ## Referencias
