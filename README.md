@@ -16,6 +16,50 @@ Soluções inteligentes vêm sendo aplicadas com frequência no dia a dia das pe
 
 Nesse contexto, neste projeto foi desenvolvido um **Varal Automático** como uma alternativa para automatizar o processo de estender e recolher as roupas, minimizando os riscos de exposição à chuva e a condições climáticas desfavoráveis. O sistema utiliza diferentes sensores para monitorar fatores como presença de chuva, nível de luminosidade e intensidade do vento, tomando decisões automáticas de movimentação do varal de acordo com o risco identificado. Para a movimentação da estrutura, é empregado um motor controlado por um microcontrolador **Arduino Uno**, integrando sensores e atuadores em um sistema automatizado.
 
+## Funcionamento
+
+O **Varal Automático** automatiza o processo de estender e recolher as roupas, monitorando constantemente as condições do ambiente utilizando alguns sensores. Com as informações recebidas pelos sensores, o sistema é capaz de decidir qual ação será realizada, evitando que as roupas fiquem expostas à chuva ou fiquem recolhidas caso o clima esteja favorável, por exemplo.
+
+### Sensores
+
+O projeto possui três sensores principais:
+
+- **Sensor de chuva**: detecta a presença de água, isto é, quando há uma umidade acima de um certo limite, o sistema entende que há risco de chuva alto;
+- **Sensor de luminosidade (LDR)**: mede a quantidade de luz no ambiente, ou seja, valores muito baixos indicam noite ou tempo nublado;
+- **Sensor de velocidade**: mede a velocidade do vento por meio da contagem de pulsos em um disco. Desse modo, caso o valor seja alto em um certo intervalo de tempo, o sistema considera que o vento está forte.
+
+Além disso, no projeto também há duas chaves de fim de curso indicando quando o varal está **totalmente estendido** ou **totalmente recolhido**. Essas chaves são fundamentais para garantir que o motor irá parar em algum momento.
+
+### Determinação do risco de chuva
+
+De acordo com os valores dos sensores, o sistema realiza um cálculo do **risco de chuva** que é definido da seguinte forma:
+
+- **Risco Alto**: se há presença de chuva (+100) ou se há baixa luminosidade (+70) e vento forte (+10);
+- **Risco Baixo**: se está apenas ventando forte (+10);
+- **Risco Médio**: se há somente baixa luminosidade (+70).
+
+A soma dos valores lidos serve para orientar a decisão do sistema.
+
+### Decisão
+
+Com isso, após calcular o risco de chuva, o varal pode se comportar de diferentes formas:
+
+- **Risco Alto**: as roupas são automaticamente recolhidas se estiverem estendidas;
+- **Risco Baixo**: se as roupas estão recolhidas, elas serão estendidas;
+- **Risco Médio**: nenhuma ação é realizada.
+
+### Utilização
+
+O teste do projeto é simples, rápido e não exige conhecimentos técnicos:
+
+1. Conecte o Arduino Uno à porta USB do computador;
+2. Energize o circuito conectando a bateria de alimentação na *protoboard*;
+3. Verifique se todos os sensores estão corretamente posicionados: sensor de chuva e de luminosidade expostos ao ambiente e o sensor de velocidade na *protoboard*;
+4. Ajuste o potenciômetro para controlar a velocidade do motor que possui o disco acoplado para controlar a velocidade do vento;
+5. A partir disso, o sistema passa a funcionar corretamente e o usuário pode realizar os testes para cada caso.
+
+**Obs**: devido às limitações mecânicas da estrutura, as chaves de fim de curso precisam ser acionadas manualmente para que o motor possa parar corretamente.
+
 ## Lista de materiais
 
 A seguir, estão listados todos os materiais utilizados na montagem do projeto:
@@ -33,10 +77,10 @@ A seguir, estão listados todos os materiais utilizados na montagem do projeto:
 | *Protoboard*               | Montar e conectar os componentes eletrônicos               |
 | Kit Motor DC 3-6V + Roda               | Movimentar o varal, permitindo recolher e estender as roupas               |
 | Kit Motor DC 3-6V               | Responsável por movimentar o disco utilizado para contar os pulsos gerados pelo sensor de velocidade               |
+| Potenciômetro                 | Controlar a velocidade do motor que simula o vento       |
 | Módulo Chave Fim de Curso (2 unidades)               | Detectar os limites físicos de movimentação do varal (totalmente estendido ou recolhido)      |
 | Elástico | Utilizado para simular a corda do varal                        |
 | Caixa de papelão              | Montar a estrutura do varal               |
-| Potenciômetro                 | Controlar a velocidade do motor que simula o vento       |
 
 - [Módulo Sensor de Chuva](https://www.eletrogate.com/modulo-sensor-de-chuva)
 - [Módulo Interruptor Magnético Reed Switch - KY-025](https://www.eletrogate.com/modulo-interruptor-magnetico-reed-switch)
@@ -62,13 +106,13 @@ A seguir, estão listados todos os materiais utilizados na montagem do projeto:
 
 Em relação aos problemas encontrados no processo de montagem, durante o desenvolvimento deste projeto, enfrentamos algumas dificuldades que influenciaram no processo de montagem e no funcionamento do Varal Inteligente:
 
-- **Estrutura do projeto**: tivemos problemas para pensar em uma estrutra que fosse mais adequado para o contexto do projeto, de modo que os sensores funcionassem corretamente e o elástico gerasse uma tensão adequado ao motor;
+- **Estrutura do projeto**: tivemos problemas para pensar em uma estrutura que fosse mais adequada para o contexto do projeto, de modo que os sensores funcionassem corretamente e o elástico gerasse uma tensão adequada ao motor;
   
-- **Motor para movimentar o varal**: testando sem a utilização do elástico, o motor funcionado perfeitamente; entretanto, ao utilizar o elástico responsável por simular a tensão do varal, a força exercida foi muito alta. Com isso, o motor não conseguiu movimentar a estrutura adequadamente, ficando incostado na caixa do protótipo;
+- **Motor para movimentar o varal**: testando sem a utilização do elástico, o motor funcionou perfeitamente; entretanto, ao utilizar o elástico responsável por simular a tensão do varal, a força exercida foi muito alta. Com isso, o motor não conseguiu movimentar a estrutura adequadamente, ficando encostado na caixa do protótipo;
 
 - **Parar o motor**: também tivemos um problema para parar o motor em uma das direções, uma vez que identificamos tardiamente que em uma das direções o valor da velocidade deveria ser 0 para parar o motor e na outra 255 (e não 0 também como achávamos);
 
-- **Ativar as chaves de fim de curso**: devido à estrutura mecânica do projeto, não foi possível implementar um mecanismo eficiente para que as chaves fossem acionados automaticamente durante o movimento do varal, sendo necessário acioná-las manualmente durante os testes;
+- **Ativar as chaves de fim de curso**: devido à estrutura mecânica do projeto, não foi possível implementar um mecanismo eficiente para que as chaves fossem acionadas automaticamente durante o movimento do varal, sendo necessário acioná-las manualmente durante os testes;
 
 - **Contagem dos pulsos**: inicialmente, a solução utilizada seria um cata-vento acoplado no sensor de velocidade para contagem dos pulsos e medição da velocidade do vento. Porém, o cata-vento colidia com a caixa do protótipo e também não foi possível encontrar um ponto adequado para sua fixação. Dessa forma, a alternativa adotada foi a utilização de um **disco acoplado a um motor DC**, o qual era posicionado manualmente no sensor para simular a contagem dos pulsos. 
 
