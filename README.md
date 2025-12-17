@@ -90,17 +90,19 @@ A seguir, estão listados todos os materiais utilizados na montagem do projeto:
 - [Módulo Ponte H Dupla HG7881 (L9110S)](https://www.eletrogate.com/modulo-ponte-h-dupla-hg7881-l9110)
 
 ## Diagrama da montagem
+![diagrama](https://github.com/user-attachments/assets/113df968-485f-4d3a-86e0-ad0e9e830497)
 
 
 ## Explicação textual do diagrama
-
+O diagrama é composto por um Arduino que gerencia a lógica e os sensores enquanto uma bateria de 9V fornece a energia para uma Ponte H acionar os motores. O sistema controla dois motores DC com funções distintas, sendo que o motor principal é responsável pelo mecanismo de estender e recolher o varal e é acionado com base nos dados do sensor de chuva, do LDR e da intensidade do vento monitorada através de um sensor de velocidade acoplado ao segundo motor. O movimento desse motor principal é limitado fisicamente por dois botões de fim de curso, enquanto o segundo motor atua exclusivamente simulando o vento sobre a roupa com sua rotação ajustada manualmente por um potenciômetro.
 
 
 ## Foto do projeto montado
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/888faff2-c6e0-4203-83e6-6803b6a8b418" />
 
 
 ## Link para o vídeo do projeto em funcionamento
-
+[Drive](https://drive.google.com/file/d/1X3wDZVni7so4rn0NJkup3wqUERlA63Jf/view?usp=sharing)
 
 ## Problemas encontrados no processo de montagem
 
